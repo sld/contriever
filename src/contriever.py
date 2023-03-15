@@ -120,11 +120,12 @@ def load_retriever(model_path, pooling="average", random_init=False):
         retriever = model_class(cfg)
         pretrained_dict = pretrained_dict["model"]
 
-        if any("encoder_q." in key for key in pretrained_dict.keys()):  # test if model is defined with moco class
-            pretrained_dict = {k.replace("encoder_q.", ""): v for k, v in pretrained_dict.items() if "encoder_q." in k}
-        elif any("encoder." in key for key in pretrained_dict.keys()):  # test if model is defined with inbatch class
-            pretrained_dict = {k.replace("encoder.", ""): v for k, v in pretrained_dict.items() if "encoder." in k}
+        # if any("encoder_q." in key for key in pretrained_dict.keys()):  # test if model is defined with moco class
+        #     pretrained_dict = {k.replace("encoder_q.", ""): v for k, v in pretrained_dict.items() if "encoder_q." in k}
+        # elif any("encoder." in key for key in pretrained_dict.keys()):  # test if model is defined with inbatch class
+        #     pretrained_dict = {k.replace("encoder.", ""): v for k, v in pretrained_dict.items() if "encoder." in k}
         retriever.load_state_dict(pretrained_dict, strict=False)
+        print("we are loaded here", retriever_model_id)
     else:
         retriever_model_id = model_path
         if "xlm" in retriever_model_id:

@@ -44,7 +44,7 @@ class Dataset(torch.utils.data.Dataset):
                 negatives += random_negatives
             if n_hard_negatives > 0:
                 hard_negatives = random.sample(
-                    example["hard_negative_ctxs"][self.hard_negative_min_idx :], n_hard_negatives
+                    example["hard_negative_ctxs"][self.negative_hard_min_idx :], n_hard_negatives
                 )
                 negatives += hard_negatives
         else:
@@ -54,7 +54,6 @@ class Dataset(torch.utils.data.Dataset):
                 negatives = [example["negative_ctxs"][nidx]]
             else:
                 negatives = []
-
         gold = gold["title"] + " " + gold["text"] if "title" in gold and len(gold["title"]) > 0 else gold["text"]
 
         negatives = [
