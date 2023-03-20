@@ -7,7 +7,7 @@ import faiss
 import argparse
 import tqdm
 import torch
-from src.contriever import Contriever
+from src.contriever import Contriever, load_retriever
 from transformers import AutoTokenizer
 
 
@@ -31,8 +31,12 @@ def main():
     args = _parse_args()
     print('torch.cuda.is_available(): ', torch.cuda.is_available())
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
-    mcontriever_msmarco = Contriever.from_pretrained(args.model_path).to(device)
-    tokenizer = AutoTokenizer.from_pretrained(args.model_path)
+    if args.model_path != "facebook/mcontriever-msmarco":
+        mcontriever_msmarco, tokenizer, retriever_model_id = load_retriever(args.model_path)
+        mcontriever_msmarco = mcontriever_msmarco.to(device)
+    else:
+        mcontriever_msmarco = Contriever.from_pretrained(args.model_path).to(device)
+        tokenizer = AutoTokenizer.from_pretrained(args.model_path)
 
     data_path = args.data_path
     with open(data_path) as f:
